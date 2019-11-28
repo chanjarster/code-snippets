@@ -1,4 +1,4 @@
-package me.chanjar.tokenbucket;
+package me.chanjar.codesnippets.tokenbucket;
 
 import static org.junit.Assert.assertEquals;
 

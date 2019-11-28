@@ -1,24 +1,21 @@
-package me.chanjar.tokenbucket;
+package me.chanjar.codesnippets.tokenbucket;
 
-import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class AtomicFieldUpdaterTokenBucket implements TokenBucket {
+public class AtomicTokenBucket implements TokenBucket {
 
   private final int issueRatePerSecond;
 
   private final int capacity;
 
-  private final AtomicIntegerFieldUpdater tokensUpdater =
-      AtomicIntegerFieldUpdater.newUpdater(AtomicFieldUpdaterTokenBucket.class, "tokens");
-
-  private volatile int tokens;
+  private final AtomicInteger tokens;
 
   private volatile long lastIssueTime;
 
-  public AtomicFieldUpdaterTokenBucket(int issueRatePerSecond, int capacity) {
+  public AtomicTokenBucket(int issueRatePerSecond, int capacity) {
     this.issueRatePerSecond = issueRatePerSecond;
     this.lastIssueTime = System.currentTimeMillis();
-    this.tokens = capacity;
+    this.tokens = new AtomicInteger(capacity);
     this.capacity = capacity;
   }
 
@@ -29,12 +26,12 @@ public class AtomicFieldUpdaterTokenBucket implements TokenBucket {
     int oldValue;
     int newValue;
     do {
-      oldValue = tokens;
+      oldValue = tokens.get();
       if (oldValue <= 0) {
         return false;
       }
       newValue = oldValue - 1;
-    } while (!tokensUpdater.compareAndSet(this, oldValue, newValue));
+    } while (!tokens.compareAndSet(oldValue, newValue));
     return true;
   }
 
@@ -46,13 +43,13 @@ public class AtomicFieldUpdaterTokenBucket implements TokenBucket {
       acquireTime = System.currentTimeMillis();
       int issueTokens = (int) ((acquireTime - lastIssueTime) / 1000L * issueRatePerSecond);
       // 签发的token上限不得超过capacity
-      oldValue = tokens;
+      oldValue = tokens.get();
       issueTokens = Math.min(capacity - oldValue, issueTokens);
       if (issueTokens <= 0) {
         return;
       }
       newValue = oldValue + issueTokens;
-    } while (!tokensUpdater.compareAndSet(this, oldValue, newValue));
+    } while (!tokens.compareAndSet(oldValue, newValue));
 
     lastIssueTime = acquireTime;
   }

@@ -1,4 +1,4 @@
-package me.chanjar.tokenbucket;
+package me.chanjar.codesnippets.tokenbucket;
 
 /**
  * 令牌桶
