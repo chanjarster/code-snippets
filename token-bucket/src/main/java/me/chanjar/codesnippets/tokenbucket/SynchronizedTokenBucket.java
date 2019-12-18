@@ -1,6 +1,6 @@
 package me.chanjar.codesnippets.tokenbucket;
 
-public class BlockingTokenBucket implements TokenBucket {
+public class SynchronizedTokenBucket implements TokenBucket {
 
   private final int issueRatePerSecond;
 
@@ -10,7 +10,7 @@ public class BlockingTokenBucket implements TokenBucket {
 
   private long lastIssueTime;
 
-  public BlockingTokenBucket(int issueRatePerSecond, int capacity) {
+  public SynchronizedTokenBucket(int issueRatePerSecond, int capacity) {
     this.issueRatePerSecond = issueRatePerSecond;
     this.lastIssueTime = System.currentTimeMillis();
     this.tokens = capacity;

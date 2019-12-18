@@ -31,28 +31,18 @@ public class SynchronizedSmoothRateLimiter implements SmoothRateLimiter {
   @Override
   public synchronized boolean tryAcquire() {
     long now = System.currentTimeMillis();
-    Long head = window.peek();
-
-    if (head == null) {
-      // 记录当前请求
+    int windowSize = window.size();
+    if (windowSize < maxRequests) {
       window.add(now);
       return true;
     }
-    /*
-     * 最早的请求距离当前请求在windowLength之内，且时间窗口记录的请求数已经超过maxRequests
-     * 说明时间窗口内已经填满
-     */
+
+    long head = window.peek().longValue();
     long distant = now - head;
-    if (distant <= windowLength && window.size() >= maxRequests) {
+    if (distant <= windowLength) {
       return false;
     }
-    /*
-     * 最早的请求距离当前请求已经超出了windowLength，那么要把这个最早的请求删掉
-     */
-    if (distant > windowLength) {
-      window.poll();
-    }
-    // 记录当前请求
+    window.poll();
     window.add(now);
     return true;
   }

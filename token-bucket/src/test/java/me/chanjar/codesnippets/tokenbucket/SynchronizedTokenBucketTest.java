@@ -1,9 +1,9 @@
 package me.chanjar.codesnippets.tokenbucket;
 
-public class BlockingTokenBucketTest extends TokenBucketTestBase {
+public class SynchronizedTokenBucketTest extends TokenBucketTestBase {
 
   @Override
   protected TokenBucket createTokenBucket(int issueRatePerSecond, int capacity) {
-    return new BlockingTokenBucket(issueRatePerSecond, capacity);
+    return new SynchronizedTokenBucket(issueRatePerSecond, capacity);
   }
 }

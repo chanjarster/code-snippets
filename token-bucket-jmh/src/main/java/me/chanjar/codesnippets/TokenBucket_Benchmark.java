@@ -41,7 +41,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 import me.chanjar.codesnippets.tokenbucket.AtomicFieldUpdaterTokenBucket;
 import me.chanjar.codesnippets.tokenbucket.AtomicTokenBucket;
-import me.chanjar.codesnippets.tokenbucket.BlockingTokenBucket;
+import me.chanjar.codesnippets.tokenbucket.SynchronizedTokenBucket;
 import me.chanjar.codesnippets.tokenbucket.TokenBucket;
 
 public class TokenBucket_Benchmark {
@@ -59,8 +59,8 @@ public class TokenBucket_Benchmark {
   @Threads(100)
   @BenchmarkMode(Mode.Throughput)
   @OutputTimeUnit(TimeUnit.SECONDS)
-  public void test_blockingBucket(TokenBucketHolder tokenBucketHolder) {
-    tokenBucketHolder.blockingBucket.tryAcquire();
+  public void test_synchronizedTokenBucket(TokenBucketHolder tokenBucketHolder) {
+    tokenBucketHolder.synchronizedTokenBucket.tryAcquire();
   }
 
   @Benchmark
@@ -81,7 +81,7 @@ public class TokenBucket_Benchmark {
 
   @State(Scope.Benchmark)
   public static class TokenBucketHolder {
-    private final TokenBucket blockingBucket = new BlockingTokenBucket(100, 10000);
+    private final TokenBucket synchronizedTokenBucket = new SynchronizedTokenBucket(100, 10000);
 
     private final TokenBucket atomicBucket = new AtomicTokenBucket(100, 10000);
 
