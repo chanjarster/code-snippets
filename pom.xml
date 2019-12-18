@@ -26,6 +26,8 @@
   <modules>
     <module>token-bucket</module>
     <module>token-bucket-jmh</module>
+    <module>smooth-rate-limit</module>
+    <module>smooth-rate-limit-jmh</module>
   </modules>
 
   <dependencyManagement>
