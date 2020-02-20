@@ -58,7 +58,7 @@ public class SynchronizedSmoothRateLimiter implements SmoothRateLimiter {
 }
 ```
 
-本例子见[SynchronizedSmoothRateLimiter](/Users/qianjia/workspace-os/code-snippets/smooth-rate-limit/src/main/java/me/chanjar/codesnippets/smoothratelimit/SynchronizedSmoothRateLimiter.java)。
+本例子见[SynchronizedSmoothRateLimiter](src/main/java/me/chanjar/codesnippets/smoothratelimit/SynchronizedSmoothRateLimiter.java)。
 
 可以使用[smooth-rate-limit-jmh](../smooth-rate-limit-jmh)来测试性能：
 
